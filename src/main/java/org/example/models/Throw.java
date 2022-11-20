@@ -8,6 +8,5 @@ import lombok.Setter;
 public class Throw {
 
     private int points;
-    private Boolean ifFoul;
 
 }
