@@ -1,13 +1,16 @@
 package org.example.generators;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
-class SplitGeneratorTest {
 
-    @Test
-    void generateSplit() {
+public class SplitGeneratorTest {
 
-    }
+  @Test
+  public void generateSplit() {
+
+    assertThat(SplitGenerator.generateSplit(), instanceOf(Boolean.class));
+  }
 }

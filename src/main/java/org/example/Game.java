@@ -15,7 +15,7 @@ public class Game {
 
   public Game(int numberOfPlayers) {
     this.playerList = new ArrayList<>(numberOfPlayers);
-    for (int i = 0; i < numberOfPlayers; i++) this.playerList.add(new Player());
+    for (int i = 0; i < numberOfPlayers; i++) this.playerList.add(new Player("Player" + i));
     this.typeChecker = new TypeChecker();
   }
 
@@ -23,26 +23,26 @@ public class Game {
     System.out.println("Start game");
     gameProgress();
     printResults();
-    checkWhoWin(playerList);
+    List<Player> winners = checkWhoWin(playerList);
+    System.out.println("\n" + "Winners \n");
+    winners.forEach(e -> System.out.println(e.getName()));
   }
 
   private void gameProgress() {
     for (int i = 0; i < 10; i++) {
       for (Player player : playerList) {
-        player.getResults().get(i).getThrow1().setPoints(PointsGenerator.generatePoints(0, 10));
+        player.getResults().get(i).setThrow1(PointsGenerator.generatePoints(0, 10));
 
-        if (player.getResults().get(i).getThrow1().getPoints() != 10) {
+        if (player.getResults().get(i).getThrow1() != 10) {
           player
               .getResults()
               .get(i)
-              .getThrow2()
-              .setPoints(
-                  PointsGenerator.generatePoints(
-                      0, 10 - player.getResults().get(i).getThrow1().getPoints()));
-        } else player.getResults().get(i).getThrow2().setPoints(0);
+              .setThrow2(
+                  PointsGenerator.generatePoints(0, 10 - player.getResults().get(i).getThrow1()));
+        } else player.getResults().get(i).setThrow2(0);
         typeChecker.checkAndSet(player.getResults().get(i), SplitGenerator.generateSplit());
         Queue queue = player.getResults().get(i);
-        queue.setSumOfPoints(queue.getThrow1().getPoints() + queue.getThrow2().getPoints());
+        queue.setSumOfPoints(queue.getThrow1() + queue.getThrow2());
       }
     }
   }
@@ -53,10 +53,8 @@ public class Game {
       System.out.println("Player : " + (i + 1));
       for (int j = 0; j < playerList.get(i).getResults().size(); j++) {
         System.out.println("  Queue : " + (j + 1));
-        System.out.println(
-            "      Throw 1 : " + playerList.get(i).getResults().get(j).getThrow1().getPoints());
-        System.out.println(
-            "      Throw 2 : " + playerList.get(i).getResults().get(j).getThrow2().getPoints());
+        System.out.println("      Throw 1 : " + playerList.get(i).getResults().get(j).getThrow1());
+        System.out.println("      Throw 2 : " + playerList.get(i).getResults().get(j).getThrow2());
         System.out.println(
             "    Sum of points : " + playerList.get(i).getResults().get(j).getSumOfPoints());
         System.out.println(
@@ -78,11 +76,17 @@ public class Game {
       if (player.getTotalPoints() > max) max = player.getTotalPoints();
     }
 
+   return checkWinners(playerList, max);
+  }
+
+  public List<Player> checkWinners(List<Player> players, int winningPoints)
+  {
     List<Player> winnerList = new ArrayList<>();
-    for (Player player : playerList) {
-      if (player.getTotalPoints() == max) winnerList.add(player);
+    for (Player player : players) {
+      if (player.getTotalPoints() == winningPoints) winnerList.add(player);
     }
 
     return winnerList;
   }
+
 }

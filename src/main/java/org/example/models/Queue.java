@@ -1,20 +1,21 @@
 package org.example.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Queue {
 
-    private Throw throw1;
-    private Throw throw2;
+    private int throw1;
+    private int throw2;
     private QueueType type;
     private int sumOfPoints;
 
     public Queue(){
-        this.throw1= new Throw();
-        this.throw2 = new Throw();
+
     }
 
 }
